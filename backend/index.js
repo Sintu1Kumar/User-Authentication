@@ -9,9 +9,9 @@ const app = express();
 app.use(express.json());
 
 // Routes
-app.use((req, res) => {
-  res.status(200).json(JSON.stringify);
-});
+const userRoute = require("./routes/user");
+
+app.use("/user", userRoute);
 
 // Server configuration
 const port = process.env.PORT || 3000;
