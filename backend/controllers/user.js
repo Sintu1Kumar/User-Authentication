@@ -1,4 +1,5 @@
 const User = require("../models/user");
+const bcrypt = require("bcrypt");
 
 const createUser = async (req, res, next) => {
   try {
@@ -6,7 +7,7 @@ const createUser = async (req, res, next) => {
     const user = new User({
       name: name,
       email: email,
-      password: password,
+      password: bcrypt.hashSync(password, 10),
       role: role,
     });
     await user.save();
@@ -25,7 +26,7 @@ const loginUser = async (req, res, next) => {
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     } else {
-      if (user.password === password) {
+      if (bcrypt.compareSync(password, user.password)) {
         return res
           .status(200)
           .json({ success: true, message: "User logged in successfully" });
